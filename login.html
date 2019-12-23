@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Logic</title>
+</head>
+
+<body>
+    <input type="text" id="user_name" placeholder="username">
+    <input type="password" id="user_pw" placeholder="password">
+
+    <button id="btn_register">Register</button>
+    <button id="btn_login">Login</button><br>
+    <label id="error_msg"></label>
+</body>
+<script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<!-- <script src="https://www.gstatic.com/firebasejs/7.6.1/firebase-app.js"></script> -->
+<script src="https://www.gstatic.com/firebasejs/5.7.1/firebase.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+<!-- <script src="https://www.gstatic.com/firebasejs/7.6.1/firebase-analytics.js"></script> -->
+
+<script>
+    // Your web app's Firebase configuration
+    var firebaseConfig = {
+        apiKey: "AIzaSyCy4XLKbfLoI2YFKCRBkctFEHXrSVf8S18",
+        authDomain: "test-b08bb.firebaseapp.com",
+        databaseURL: "https://test-b08bb.firebaseio.com",
+        projectId: "test-b08bb",
+        storageBucket: "test-b08bb.appspot.com",
+        messagingSenderId: "324843956095",
+        // appId: "1:324843956095:web:d0edabf9dd11ff4c6d1c4a",
+        // measurementId: "G-FGLY5NMYY2"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    //   firebase.analytics();
+    var db = firebase.database();
+</script>
+<script>
+    function check_exist(obj, list) {
+        var i;
+        for (i = 0; i < list.length; i++) {
+            if (list[i] == obj) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    function register(name, pw) {
+        db.ref('users/').on('value', function (snapshot) {
+            exist_users = Object.keys(snapshot.val());
+            idx = exist_users.indexOf(name);
+            if (idx == -1) {
+                db.ref('users/' + name).set({
+                    password: pw,
+                    score: 0
+                });
+                $('#error_msg').html('Register success.')
+            } else {
+                $('#error_msg').html('User name has been registered.');
+            }
+        });
+    }
+
+    function login(name, pw) {
+        db.ref('users/').on('value', function (snapshot) {
+            exist_users = Object.keys(snapshot.val());
+            idx = exist_users.indexOf(name);
+            if (idx == -1) {
+                $('#error_msg').html('User name does not exist.');
+            } else {
+                db.ref('users/' + name).on('value', function (snapshot) {
+                    data = snapshot.val();
+                    if (data['password'] != pw) {
+                        $('#error_msg').html('User name or password does not correct.');
+                    } else {
+                        $('#error_msg').html('Welcome.');
+                        setTimeout(timeout=3000);
+                        var url = "./playground.html?name="+encodeURIComponent(name);
+                        console.log(url);
+                        window.location.href = url;
+                    }
+                });
+            }
+        });
+    }
+
+    $(document).ready(function () {
+        $("#btn_register").click(function () {
+            // console.log('register click');
+            var name = $('#user_name').val();
+            var pw = $('#user_pw').val();
+            // console.log(typeof (pw));
+            if (name === "" || pw === "") {
+                $('#error_msg').html('User name or password is empty.');
+            } else {
+                register(name, pw);
+            }
+        });
+
+        $("#btn_login").click(function () {
+            // console.log('register click');
+            var name = $('#user_name').val();
+            var pw = $('#user_pw').val();
+            // console.log(typeof (pw));
+            if (name === "" || pw === "") {
+                $('#error_msg').html('User name or password is empty.');
+            } else { login(name, pw) }
+        });
+    });
+
+
+</script>
+
+</html>

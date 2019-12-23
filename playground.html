@@ -1,0 +1,85 @@
+<html>
+
+<head>
+    <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.7.1/firebase.js"></script>
+    <script>
+        // Your web app's Firebase configuration
+        var firebaseConfig = {
+            apiKey: "AIzaSyCy4XLKbfLoI2YFKCRBkctFEHXrSVf8S18",
+            authDomain: "test-b08bb.firebaseapp.com",
+            databaseURL: "https://test-b08bb.firebaseio.com",
+            projectId: "test-b08bb",
+            storageBucket: "test-b08bb.appspot.com",
+            messagingSenderId: "324843956095",
+            // appId: "1:324843956095:web:d0edabf9dd11ff4c6d1c4a",
+            // measurementId: "G-FGLY5NMYY2"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        //   firebase.analytics();
+        var db = firebase.database();
+    </script>
+
+
+    <script type="text/javascript">
+        var queryString = new Array();
+        var user_name;
+        $(function () {
+            if (queryString.length == 0) {
+                if (window.location.search.split('?').length > 1) {
+                    var params = window.location.search.split('?')[1].split('&');
+                    for (var i = 0; i < params.length; i++) {
+                        var key = params[i].split('=')[0];
+                        var value = decodeURIComponent(params[i].split('=')[1]);
+                        queryString[key] = value;
+                    }
+                }
+            }
+            if (queryString["name"] != null) {
+                var data = "";
+                user_name = queryString["name"];
+                data += "<h1><b>Welcome:</b> " + user_name + "</h1>";
+                $("#welcome").html(data);
+            }
+        });
+    </script>
+
+</head>
+
+<body onload=draw_table()>
+    <!-- <canvas id="myCanvas" width="1100" height="1100" style="border:1px solid #d3d3d3;" onclick="check_borad(event)">
+        Your browser does not support the HTML5 canvas tag.</canvas> -->
+    <p id="welcome"></p>
+    <table>
+        <tr>
+            <td rowspan="2">
+                <canvas id="myCanvas" width="1100" height="1100" style="border:1px solid #d3d3d3;"
+                    onclick="check_borad(event)">
+                    Your browser does not support the HTML5 canvas tag.</canvas>
+            </td>
+            <td>
+                <!-- <p id='player'><h1>Player: O</h1></p> -->
+                <p id='player'>Player: O</p>
+            </td>
+            <td valign='top'>
+                <!-- <input type="text" id="push_name" placeholder="暱稱" /> -->
+                <!-- <input type="text" id="push_msg" placeholder="訊息" /> -->
+                <!-- <button id="push_test">Push</button><br><br> -->
+                <label><h1>TOP PLAYERS</h1></label><br>
+                <table id="data"></table><br>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p id='x_line'>X: 0</p>
+            </td>
+            <td>
+                <p id='o_line'>O: 0</p>
+            </td>
+        </tr>
+    </table>
+</body>
+<script src="draw.js"></script>
+
+</html>
