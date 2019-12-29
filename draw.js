@@ -10,7 +10,8 @@ var width_unit = c.width / 11;
 var height_unit = c.height / 11;
 var unit = c.height / 11;
 
-var xline = (oline = 0);
+var xline = 0;
+var oline = 0;
 var step_count = 0;
 
 function setborad() {
