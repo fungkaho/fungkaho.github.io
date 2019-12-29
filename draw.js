@@ -344,10 +344,12 @@ function check_three() {
 function check_win(user_name) {
   if (xline > oline) {
     console.log("X win!!");
-  } else if (oline > xline) {
-    console.log("O win!!");
   } else {
-    console.log("Tie!!");
+    if (oline > xline) {
+      console.log("O win!!");
+    } else {
+      console.log("Tie!!");
+    }
   }
   db.ref("users/" + user_name).on("value", function(snapshot) {
     console.log(snapshot.val().score);
@@ -400,12 +402,13 @@ function show_data() {
           "</h2></td><td class='top3'><h2>" +
           dict2[i].score +
           "</h2></td></tr>";
-      }else{
-        x+="<tr><td><h2>" +
-        dict2[i].user_name +
-        "</h2></td><td><h2>" +
-        dict2[i].score +
-        "</h2></td></tr>";
+      } else {
+        x +=
+          "<tr><td><h2>" +
+          dict2[i].user_name +
+          "</h2></td><td><h2>" +
+          dict2[i].score +
+          "</h2></td></tr>";
       }
     }
     x += "</table>";
