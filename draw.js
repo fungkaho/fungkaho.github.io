@@ -344,7 +344,7 @@ function check_three() {
 function check_win(user_name) {
   if (xline > oline) {
     console.log("X win!!");
-  } else if (oline < xline) {
+  } else if (oline > xline) {
     console.log("O win!!");
   } else {
     console.log("Tie!!");
