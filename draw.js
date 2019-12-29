@@ -348,7 +348,7 @@ function check_win(user_name) {
   } else {
     console.log("Tie!!");
   }
-  db.ref("users/" + user_name).on('value', function (snapshot) {
+  db.ref("users/" + user_name).on("value", function(snapshot) {
     console.log(snapshot.val().score);
     if (oline > snapshot.val().score) {
       write_data(user_name, oline);
@@ -360,14 +360,14 @@ function write_data(name, oline) {
   var updates = {};
   updates["users/" + name + "/score"] = oline;
   db.ref().update(updates);
-  show_data()
+  show_data();
 }
 
 function show_data() {
   // db.ref("users/").on("value", function(snapshot) {
   //   console.log(snapshot.val());
   // });
-  db.ref("users/").on("value", function (snapshot) {
+  db.ref("users/").on("value", function(snapshot) {
     keys = Object.keys(snapshot.val());
     values = Object.values(snapshot.val());
     dict2 = [];
@@ -382,22 +382,30 @@ function show_data() {
     }
     // console.log(dict2);
 
-    dict2 = dict2.sort(function (a, b) {
+    dict2 = dict2.sort(function(a, b) {
       return a.score < b.score ? 1 : -1;
     });
     // console.log(dict2);
 
     var x = "<tr><th><h1>User</h1></th><th><h1>Score</h1></th></tr>";
-    for (let i = 0; i < dict2.length; i++) {
+    for (let i = 0; i < dict2.length - 1; i++) {
       // var score = exist_users[i]["score"];
       // console.log(keys[i]);
       // console.log(values[i]["score"]);
-      x +=
-        "<tr><td><h2>" +
+      if (i < 3) {
+        x +=
+          "<tr><td class='top3'><h2>" +
+          dict2[i].user_name +
+          "</h2></td><td class='top3'><h2>" +
+          dict2[i].score +
+          "</h2></td></tr>";
+      }else{
+        x+="<tr><td><h2>" +
         dict2[i].user_name +
         "</h2></td><td><h2>" +
         dict2[i].score +
         "</h2></td></tr>";
+      }
     }
     x += "</table>";
     document.getElementById("data").innerHTML = x;

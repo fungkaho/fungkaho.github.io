@@ -83,8 +83,13 @@
                     } else {
                         $('#error_msg').html('Welcome.');
                         setTimeout(timeout=3000);
-                        var url = "./playground.html?name="+encodeURIComponent(name);
-                        console.log(url);
+                        if (name!='admin'){
+                            var url = "./playground.html?name="+encodeURIComponent(name);
+                            console.log(url);
+                        }else{
+                            var url = "./admin.html";
+                            console.log(url);
+                        }
                         window.location.href = url;
                     }
                 });

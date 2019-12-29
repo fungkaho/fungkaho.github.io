@@ -20,8 +20,6 @@
         //   firebase.analytics();
         var db = firebase.database();
     </script>
-
-
     <script type="text/javascript">
         var queryString = new Array();
         var user_name;
@@ -44,6 +42,16 @@
             }
         });
     </script>
+    <style>
+        table {
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .top3{
+            color: red;
+        }
+    </style>
 
 </head>
 
@@ -66,7 +74,9 @@
                 <!-- <input type="text" id="push_name" placeholder="暱稱" /> -->
                 <!-- <input type="text" id="push_msg" placeholder="訊息" /> -->
                 <!-- <button id="push_test">Push</button><br><br> -->
-                <label><h1>TOP PLAYERS</h1></label><br>
+                <label>
+                    <h1>TOP PLAYERS</h1>
+                </label><br>
                 <table id="data"></table><br>
             </td>
         </tr>
