@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title></title>
+    <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+</head>
+
+<body>
+    <input type="text" id="user_email" placeholder="email"><br>
+    <input type="password" id="user_pw" placeholder="password"><br>
+
+    <button id="btn_register">Register</button>
+    <button id="btn_login">Login</button><br>
+    <button id="SignOut">sign out</button><br>
+    <button id="getUID">uid</button><br>
+    <label id="error_msg"></label>
+    <input type="text" id="name" placeholder="name"><br>
+    <button id="write">write</button><br>
+    <button id="show">show</button><br>
+    <label id="msg"></label>
+</body>
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/7.6.1/firebase.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+
+<script>
+    // Your web app's Firebase configuration
+    var firebaseConfig = {
+        apiKey: "AIzaSyABAONur1u0AprlUzrFZH9qBc_9Q2nzH24",
+        authDomain: "lessons-d91c1.firebaseapp.com",
+        databaseURL: "https://lessons-d91c1.firebaseio.com",
+        projectId: "lessons-d91c1",
+        storageBucket: "lessons-d91c1.appspot.com",
+        messagingSenderId: "463233444995",
+        appId: "1:463233444995:web:35ba50f28dcddbf15b3fb6"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    var database = firebase.database();
+</script>
+<script>
+    $(document).ready(function () {
+        //regster
+        $('#btn_register').click(function () {
+            var email = $('#user_email').val();
+            var password = $('#user_pw').val();
+            firebase.auth().createUserWithEmailAndPassword(email, password).catch((error) => {
+                // Handle Errors here.
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                // ...
+                alert(errorMessage)
+            }).then(function (error) { if (error.code != 400) alert("成功創建用戶認證！"); });
+        });
+
+        //login
+        var userLogin;
+        var uid;
+        $("#btn_login").click(function () {
+            var email = $('#user_email').val();
+            var password = $('#user_pw').val();
+            firebase.auth().signInWithEmailAndPassword(email, password).catch((error) => {
+                // Handle Errors here.
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                // ...
+                alert(errorMessage)
+            })
+            firebase.auth().onAuthStateChanged(function (user) {
+                if (user) {
+                    userLogin = user;
+                    alert("User is logined")
+                } else {
+                    userLogin = null;
+                    alert("User is not logined yet.");
+                }
+            });
+        });
+        $("#SignOut").click(function () {
+            firebase.auth().signOut().then(function () {
+                console.log("User sign out!");
+            }, function (error) {
+                console.log("User sign out error!");
+            })
+        });
+        //uid
+        $("#getUID").click(function () {
+            if (userLogin) {
+                alert(userLogin['uid']);
+                uid = userLogin['uid'];
+            }
+        });
+
+        //write
+        $("#write").click(function () {
+            var name = $('#name').val();
+            database.ref('uid/' + uid).set({
+                name: name,
+            });
+        });
+
+        $("#show").click(function () {
+            database.ref('uid/' + uid).once('value', function (snapshot) {
+                var username = (snapshot.val() && snapshot.val().name) || 'Anonymous';
+                alert(username);
+            });
+        });
+    });
+</script>
+
+</html>
